@@ -58,7 +58,7 @@ Vec3f Vec3f::cross(const Vec3f& vec) const
 // returns length of vector
 float Vec3f::length() const
 {
-	return sqrt(pow(x_, 2) + pow(y_, 2) + pow(z_, 2);
+	return sqrt(pow(x_, 2) + pow(y_, 2) + pow(z_, 2));
 }
 
 // returns the unit vector
