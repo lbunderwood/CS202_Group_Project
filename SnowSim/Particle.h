@@ -15,12 +15,22 @@ class Particle
 public:
 
 	Particle();
+	Particle(float x, float y, float z);
+	Particle(Vec3f nPos);
+
+	std::vector<float> getPos() const;
+
+	void setPos(float x, float y, float z);
+	void setPos(Vec3f nPos);
+
+	void setForce(float x, float y, float z);
+	void setForce(Vec3f nForce);
 
 private:
 
-	Vec3f pos;
+	Vec3f pos_;
 
-	Vec3f force;
+	Vec3f force_;
 
 };
 

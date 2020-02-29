@@ -49,9 +49,9 @@ float Vec3f::dot(const Vec3f& vec) const
 Vec3f Vec3f::cross(const Vec3f& vec) const
 {
 	Vec3f output(
-		y_ * vec.getVec[2] - vec.getVec[1] * z_,
-		z_ * vec.getVec[0] - vec.getVec[2] * x_,
-		x_ * vec.getVec[1] - vec.getVec[0] * y_);
+		y_ * vec.getVec()[2] - vec.getVec()[1] * z_,
+		z_ * vec.getVec()[0] - vec.getVec()[2] * x_,
+		x_ * vec.getVec()[1] - vec.getVec()[0] * y_);
 	return output;
 }
 
@@ -77,9 +77,9 @@ Vec3f Vec3f::unit() const
 Vec3f operator +(const Vec3f& vec1, const Vec3f& vec2)
 {
 	Vec3f output(
-		vec1.getVec()[0] + vec2.getVec[0],
-		vec1.getVec()[1] + vec2.getVec[1],
-		vec1.getVec()[2] + vec2.getVec[2]);
+		vec1.getVec()[0] + vec2.getVec()[0],
+		vec1.getVec()[1] + vec2.getVec()[1],
+		vec1.getVec()[2] + vec2.getVec()[2]);
 	return output;
 }
 
@@ -87,9 +87,9 @@ Vec3f operator +(const Vec3f& vec1, const Vec3f& vec2)
 Vec3f operator -(const Vec3f& vec1, const Vec3f& vec2)
 {
 	Vec3f output(
-		vec1.getVec()[0] - vec2.getVec[0],
-		vec1.getVec()[1] - vec2.getVec[1],
-		vec1.getVec()[2] - vec2.getVec[2]);
+		vec1.getVec()[0] - vec2.getVec()[0],
+		vec1.getVec()[1] - vec2.getVec()[1],
+		vec1.getVec()[2] - vec2.getVec()[2]);
 	return output;
 }
 
@@ -116,17 +116,17 @@ Vec3f operator *(int num, const Vec3f& vec)
 // prototype for vector comparison ==
 bool operator ==(const Vec3f& vec1, const Vec3f& vec2)
 {
-	return vec1.getVec()[0] == vec2.getVec[0] &&
-		   vec1.getVec()[1] == vec2.getVec[1] &&
-		   vec1.getVec()[2] == vec2.getVec[2];
+	return vec1.getVec()[0] == vec2.getVec()[0] &&
+		   vec1.getVec()[1] == vec2.getVec()[1] &&
+		   vec1.getVec()[2] == vec2.getVec()[2];
 }
 
 // prototype for vector comparison !=
 bool operator !=(const Vec3f& vec1, const Vec3f& vec2)
 {
-	return vec1.getVec()[0] != vec2.getVec[0] ||
-		   vec1.getVec()[1] != vec2.getVec[1] ||
-		   vec1.getVec()[2] != vec2.getVec[2];
+	return vec1.getVec()[0] != vec2.getVec()[0] ||
+		   vec1.getVec()[1] != vec2.getVec()[1] ||
+		   vec1.getVec()[2] != vec2.getVec()[2];
 }
 
 // prototype for vector comparison strictly greater than
