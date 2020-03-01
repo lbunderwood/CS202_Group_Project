@@ -19,8 +19,7 @@ Vec3f::Vec3f(int x, int y, int z) : x_(x), y_(y), z_(z) {}
 // returns vec of the values
 std::vector<float> Vec3f::getVec() const
 {
-	std::vector<float> output = { x_, y_, z_ };
-	return output;
+	return { x_, y_, z_ };
 }
 
 // sets new vector values with floats
@@ -66,8 +65,7 @@ float Vec3f::length() const
 // returns the unit vector
 Vec3f Vec3f::unit() const
 {
-	Vec3f output = (1 / length()) * *this;
-	return output;
+	return (1 / length()) * *this;
 }
 
 
