@@ -26,6 +26,20 @@ std::vector<float> Particle::getPos() const
 	return output;
 }
 
+std::vector<float> Particle::getVel() const
+{
+	std::vector<float> velv = vel_.getVec();
+	std::vector<float> output = { velv[0], velv[1], velv[2] };
+	return output;
+}
+
+std::vector<float> Particle::getForce() const
+{
+	std::vector<float> accv = force_.getVec();
+	std::vector<float> output = { accv[0], accv[1], accv[2] };
+	return output;
+}
+
 
 void Particle::setPos(float x, float y, float z)
 {
@@ -35,6 +49,16 @@ void Particle::setPos(float x, float y, float z)
 void Particle::setPos(Vec3f nPos)
 {
     pos_ = nPos;
+}
+
+void Particle::setVel(float x, float y, float z)
+{
+	vel_.setVec(x, y, z);
+}
+
+void Particle::setVel(Vec3f nVel)
+{
+	vel_ = nVel;
 }
 
 void Particle::setForce(float x, float y, float z)
