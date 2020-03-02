@@ -38,14 +38,21 @@ int main()
 		particles.push_back(newParticle);
 	}
 
+	std::vector<GLfloat> vertices;
 	for (auto p : particles) {
 		std::vector<float> pos = p.getPos();
-		std::cout << "x: " << pos[0];
+		/*std::cout << "x: " << pos[0];
 		std::cout << "y: " << pos[1];
 		std::cout << "z: " << pos[2];
-		std::cout << "\n";
+		std::cout << "\n";*/
+		vertices.push_back(pos[0]);
+		vertices.push_back(pos[1]);
+		vertices.push_back(pos[2]);
 	}
 
+	for (auto v : vertices) {
+		std::cout << v << "\n";
+	}
 
 	glfwInit();
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
@@ -72,7 +79,12 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	float angle = 0.1;
+	GLuint buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices.front(), GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), 0);
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
@@ -83,14 +95,16 @@ int main()
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 		glPointSize(10.0f);
-		glBegin(GL_POINTS);
+		/*glBegin(GL_POINTS);
 
 		for (auto p : particles) {
 			std::vector<float> pos = p.getPos();
 			glVertex3f(pos[0], pos[1], pos[2]);
 		}
 
-		glEnd();
+		glEnd();*/
+
+		glDrawArrays(GL_POINTS, 0, 100);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
