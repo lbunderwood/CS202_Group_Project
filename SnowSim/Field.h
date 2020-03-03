@@ -15,8 +15,14 @@ class Field
 {
 public:
 
-	// Default constructor. Sets everything to gravitational acceleration
+	// Default constructor. Sets everything to only gravity
 	Field();
+
+	// get vector at position x, y
+	Vec3f getForce(float x, float y) const;
+
+	// sets wind speed for whole field
+	void setWind(float windspeed);
 
 private:
 
