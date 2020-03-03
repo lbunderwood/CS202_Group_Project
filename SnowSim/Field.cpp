@@ -20,7 +20,7 @@ Field::Field()
 // get vector at position x, y using the opengl coordinate system
 Vec3f Field::getForce(float x, float y) const
 {
-	return field_[round((x + 1.0f) * 10.0f)][round((y + 1.0f) * 10.0f)];
+	return field_[floor((x + 1.0f) * 10.0f)][floor((y + 1.0f) * 10.0f)];
 }
 
 // sets wind speed for whole field

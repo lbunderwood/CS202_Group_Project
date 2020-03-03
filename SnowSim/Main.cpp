@@ -9,6 +9,7 @@
 #include <GLFW/glfw3.h>
 #include "Vec3f.h"
 #include "Particle.h"
+#include "Field.h"
 #include <iostream>
 #include <vector>
 #include <random>
