@@ -70,3 +70,14 @@ void Particle::setForce(Vec3f nForce)
 {
     force_ = nForce;
 }
+
+void Particle::update()
+{
+	double dt = 1.0 / 60.0;
+	std::vector<float> tempv = vel_.getVec();
+	std::vector<float> tempp = pos_.getVec();
+	tempv[1] += (dt * -0.01);
+	tempp[1] += (tempv[1] * dt);
+	vel_.setVec(tempv[0], tempv[1], tempv[2]);
+	pos_.setVec(tempp[0], tempp[1], tempp[2]);
+}

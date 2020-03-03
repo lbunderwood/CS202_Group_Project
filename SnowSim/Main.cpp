@@ -20,7 +20,7 @@ const char* vertexShaderSource =
 "uniform float yOffset;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y - yOffset, aPos.z, 1.0);\n"
+"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "}\0";
 
 const char* fragmentShaderSource =
@@ -51,7 +51,7 @@ int main()
 	std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 
 	std::vector<Particle> particles;
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 100; i++) {
 		Particle newParticle(dist(gen), dist(gen), dist(gen));
 		particles.push_back(newParticle);
 	}
@@ -106,7 +106,7 @@ int main()
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices.front(), GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices.front(), GL_STREAM_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
@@ -129,34 +129,30 @@ int main()
 	glAttachShader(program, fragmentShader);
 	glLinkProgram(program);
 
-	float offset = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
 
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		//glMatrixMode(GL_MODELVIEW);
 
-		//glColor3f(1.0f, 1.0f, 1.0f);
-		//glPointSize(10.0f);
-		/*glBegin(GL_POINTS);
-
-		for (auto p : particles) {
-			std::vector<float> pos = p.getPos();
-			glVertex3f(pos[0], pos[1], pos[2]);
+		vertices.clear();
+		for (size_t i = 0; i < particles.size(); ++i) {
+			particles[i].update();
+			std::vector<float> pos = particles[i].getPos();
+			vertices.push_back(pos[0]);
+			vertices.push_back(pos[1]);
+			vertices.push_back(pos[2]);
 		}
-
-		glEnd();*/
-
-		//std::cout << "\n\n\n";
-		for (auto v : vertices) {
-			v = v + 0.2f;
-			//std::cout << v << "\n";
+		/*for (size_t i = 0; i < vertices.size(); ++i) {
+			if ((i - 1) % 3 == 0) {
+				vertices[i] += -0.0001;
+			}
 		}
-		offset += 0.001;
-		int location = glGetUniformLocation(program, "yOffset");
-		glUniform1f(location, offset);
+		
+		/*for (auto v : vertices) {
+			v += -0.0001;
+		}*/
 
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -166,7 +162,7 @@ int main()
 
 		glUseProgram(program);
 		glBindVertexArray(vao);
-		glDrawArrays(GL_POINTS, 0, 10);
+		glDrawArrays(GL_POINTS, 0, particles.size());
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

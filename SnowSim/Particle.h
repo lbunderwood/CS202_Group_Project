@@ -39,6 +39,8 @@ public:
 	void setForce(float x, float y, float z);
 	void setForce(Vec3f nForce);
 
+	void update();
+
 private:
 
 	Vec3f pos_;
