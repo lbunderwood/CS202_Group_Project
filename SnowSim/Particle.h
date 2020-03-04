@@ -39,7 +39,7 @@ public:
 	void setForce(float x, float y, float z);
 	void setForce(Vec3f nForce);
 
-	void update();
+	void update(const double& dt);
 
 private:
 

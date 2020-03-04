@@ -60,10 +60,6 @@ int main()
 	std::vector<float> vertices;
 	for (auto p : particles) {
 		std::vector<float> pos = p.getPos();
-		/*std::cout << "x: " << pos[0];
-		std::cout << "y: " << pos[1];
-		std::cout << "z: " << pos[2];
-		std::cout << "\n";*/
 		vertices.push_back(pos[0]);
 		vertices.push_back(pos[1]);
 		vertices.push_back(pos[2]);
@@ -130,37 +126,57 @@ int main()
 	glAttachShader(program, fragmentShader);
 	glLinkProgram(program);
 
+	const double dt = 1.0 / 60.0;
+
+	double currentTime = glfwGetTime();
+	double accumulator = 0.0;
+
 	while (!glfwWindowShouldClose(window)) {
-		processInput(window);
-
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-		vertices.clear();
-		for (size_t i = 0; i < particles.size(); ++i) {
-			particles[i].update();
-			std::vector<float> pos = particles[i].getPos();
-			vertices.push_back(pos[0]);
-			vertices.push_back(pos[1]);
-			vertices.push_back(pos[2]);
-		}
-		/*for (size_t i = 0; i < vertices.size(); ++i) {
-			if ((i - 1) % 3 == 0) {
-				vertices[i] += -0.0001;
+		int end = particles.size();
+		for (int i = 0; i < end; ++i) {
+			std::vector<float> tempp = particles[i].getPos();
+			if (tempp[1] < -1.0f) {
+				particles.erase(particles.begin() + i);
+				i--;
+				end--;
 			}
 		}
-		
-		/*for (auto v : vertices) {
-			v += -0.0001;
-		}*/
+
+		for (int i = 0; i < 10; i++) {
+			Particle newParticle(dist(gen), dist(gen), dist(gen));
+			particles.push_back(newParticle);
+		}
+
+		processInput(window);
+
+
+		double newTime = glfwGetTime();
+		double frameTime = newTime - currentTime;
+		currentTime = newTime;
+
+		accumulator += frameTime;
+
+		while(accumulator >= dt) {
+			vertices.clear();
+			for (size_t i = 0; i < particles.size(); ++i) {
+				particles[i].update(dt);
+				std::vector<float> pos = particles[i].getPos();
+				vertices.push_back(pos[0]);
+				vertices.push_back(pos[1]);
+				vertices.push_back(pos[2]);
+			}
+
+			accumulator -= dt;
+		}
+
 
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices.front(), GL_STREAM_DRAW);
 
-
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glUseProgram(program);
 		glBindVertexArray(vao);
 		glDrawArrays(GL_POINTS, 0, particles.size());
@@ -170,10 +186,7 @@ int main()
 
 		glBindVertexArray(0);
 
-		//std::cout << "\n\n\n";
-		//for (auto v : vertices) {
-		//	std::cout << v << "\n";
-		//}
+		std::cout << "N = " << particles.size() << "\n";
 	}
 
 	glfwTerminate();
