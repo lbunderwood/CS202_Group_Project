@@ -13,7 +13,7 @@ Particle::Particle() {}
 
 Particle::Particle(float x, float y, float z) {
     pos_.setVec(x, y, z);
-	force_.setVec(0.0f, -4.905f, 0.0f);
+	force_.setVec(0.0f, -9.8f, 0.0f);
 }
 
 

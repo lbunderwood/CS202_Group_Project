@@ -62,9 +62,9 @@ int main()
 		p.pushData(vertices);
 	}
 
-	/*for (auto v : vertices) {
+	for (auto v : vertices) {
 		std::cout << v << "\n";
-	}*/
+	}
 
 	glfwInit();
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
@@ -91,7 +91,7 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-	glPointSize(10.0f);
+	glPointSize(2.0f);
 
 	unsigned int vao;
 	glGenVertexArrays(1, &vao);
@@ -139,7 +139,7 @@ int main()
 			}
 		}
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			Particle newParticle(dist(gen), dist(gen), dist(gen));
 			particles.push_back(newParticle);
 		}
@@ -180,7 +180,7 @@ int main()
 
 		glBindVertexArray(0);
 
-		//std::cout << "N = " << particles.size() << "\n";
+		std::cout << "N = " << particles.size() << "\n";
 	}
 
 	glfwTerminate();
