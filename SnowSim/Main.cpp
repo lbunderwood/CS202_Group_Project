@@ -53,7 +53,7 @@ int main()
 
 	std::vector<Particle> particles;
 	for (int i = 0; i < 100; i++) {
-		Particle newParticle(dist(gen), dist(gen), dist(gen));
+		Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
 		particles.push_back(newParticle);
 	}
 
@@ -62,9 +62,9 @@ int main()
 		p.pushData(vertices);
 	}
 
-	for (auto v : vertices) {
+	/*for (auto v : vertices) {
 		std::cout << v << "\n";
-	}
+	}*/
 
 	glfwInit();
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
@@ -139,8 +139,8 @@ int main()
 			}
 		}
 
-		for (int i = 0; i < 10; i++) {
-			Particle newParticle(dist(gen), dist(gen), dist(gen));
+		for (int i = 0; i < 100; i++) {
+			Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
 			particles.push_back(newParticle);
 		}
 
@@ -180,7 +180,7 @@ int main()
 
 		glBindVertexArray(0);
 
-		std::cout << "N = " << particles.size() << "\n";
+		//std::cout << "N = " << particles.size() << "\n";
 	}
 
 	glfwTerminate();
