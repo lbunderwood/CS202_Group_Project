@@ -131,15 +131,14 @@ int main()
 	while (!glfwWindowShouldClose(window)) {
 		int end = particles.size();
 		for (int i = 0; i < end; ++i) {
-			std::vector<float> tempp = particles[i].getPos();
-			if (tempp[1] < -1.0f) {
+			if (particles[i].checkBounds()) {
 				particles.erase(particles.begin() + i);
 				i--;
 				end--;
 			}
 		}
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 300; i++) {
 			Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
 			particles.push_back(newParticle);
 		}

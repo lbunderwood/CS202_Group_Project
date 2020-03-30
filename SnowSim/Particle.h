@@ -43,6 +43,8 @@ public:
 
 	void pushData(std::vector<float>& vertices);
 
+	bool checkBounds();
+
 private:
 
 	Vec3f pos_;

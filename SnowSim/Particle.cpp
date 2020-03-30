@@ -90,3 +90,9 @@ void Particle::pushData(std::vector<float>& vertices)
 	vertices.push_back(pos_.y_);
 	vertices.push_back(pos_.z_);
 }
+
+
+bool Particle::checkBounds()
+{
+	return pos_.y_ < -1.0f;
+}
