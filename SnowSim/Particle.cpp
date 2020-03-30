@@ -13,7 +13,7 @@ Particle::Particle() {}
 
 Particle::Particle(float x, float y, float z) {
     pos_.setVec(x, y, z);
-	force_.setVec(0.0f, -9.8f, 0.0f);
+	force_.setVec(1.0f, -9.8f, 0.0f);
 }
 
 
@@ -74,13 +74,12 @@ void Particle::setForce(Vec3f nForce)
 
 void Particle::update(const double& dt)
 {
-	std::vector<float> tempf = force_.getVec();
-	std::vector<float> tempv = vel_.getVec();
-	std::vector<float> tempp = pos_.getVec();
-	tempv[1] += (tempf[1] * dt);
-	tempp[1] += (tempv[1] * dt);
-	vel_.setVec(tempv[0], tempv[1], tempv[2]);
-	pos_.setVec(tempp[0], tempp[1], tempp[2]);
+	vel_.x_ += (force_.x_ * dt);
+	vel_.y_ += (force_.y_ * dt);
+	vel_.z_ += (force_.z_ * dt);
+	pos_.x_ += (vel_.x_ * dt);
+	pos_.y_ += (vel_.y_ * dt);
+	pos_.z_ += (vel_.z_ * dt);
 }
 
 

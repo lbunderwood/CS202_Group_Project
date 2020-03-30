@@ -138,7 +138,7 @@ int main()
 			}
 		}
 
-		for (int i = 0; i < 300; i++) {
+		for (int i = 0; i < 100; i++) {
 			Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
 			particles.push_back(newParticle);
 		}
