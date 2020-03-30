@@ -82,3 +82,11 @@ void Particle::update(const double& dt)
 	vel_.setVec(tempv[0], tempv[1], tempv[2]);
 	pos_.setVec(tempp[0], tempp[1], tempp[2]);
 }
+
+
+void Particle::pushData(std::vector<float>& vertices)
+{
+	vertices.push_back(pos_.x_);
+	vertices.push_back(pos_.y_);
+	vertices.push_back(pos_.z_);
+}

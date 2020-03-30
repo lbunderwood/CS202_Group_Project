@@ -41,6 +41,8 @@ public:
 
 	void update(const double& dt);
 
+	void pushData(std::vector<float>& vertices);
+
 private:
 
 	Vec3f pos_;

@@ -37,7 +37,7 @@ public:
 	// returns the unit vector
 	Vec3f unit() const;
 
-private:
+//private:
 
 	float x_;
 	float y_;

@@ -59,15 +59,12 @@ int main()
 
 	std::vector<float> vertices;
 	for (auto p : particles) {
-		std::vector<float> pos = p.getPos();
-		vertices.push_back(pos[0]);
-		vertices.push_back(pos[1]);
-		vertices.push_back(pos[2]);
+		p.pushData(vertices);
 	}
 
-	for (auto v : vertices) {
+	/*for (auto v : vertices) {
 		std::cout << v << "\n";
-	}
+	}*/
 
 	glfwInit();
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
@@ -142,7 +139,7 @@ int main()
 			}
 		}
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			Particle newParticle(dist(gen), dist(gen), dist(gen));
 			particles.push_back(newParticle);
 		}
@@ -160,10 +157,7 @@ int main()
 			vertices.clear();
 			for (size_t i = 0; i < particles.size(); ++i) {
 				particles[i].update(dt);
-				std::vector<float> pos = particles[i].getPos();
-				vertices.push_back(pos[0]);
-				vertices.push_back(pos[1]);
-				vertices.push_back(pos[2]);
+				particles[i].pushData(vertices);
 			}
 
 			accumulator -= dt;
@@ -186,7 +180,7 @@ int main()
 
 		glBindVertexArray(0);
 
-		std::cout << "N = " << particles.size() << "\n";
+		//std::cout << "N = " << particles.size() << "\n";
 	}
 
 	glfwTerminate();
