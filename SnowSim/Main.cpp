@@ -12,6 +12,7 @@
 #include "Field.h"
 #include <iostream>
 #include <vector>
+#include <list>
 #include <random>
 
 
@@ -51,7 +52,7 @@ int main()
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 
-	std::vector<Particle> particles;
+	std::list<Particle> particles;
 	for (int i = 0; i < 100; i++) {
 		Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
 		particles.push_back(newParticle);
@@ -129,16 +130,25 @@ int main()
 	double accumulator = 0.0;
 
 	while (!glfwWindowShouldClose(window)) {
-		int end = particles.size();
+		/*int end = particles.size();
 		for (int i = 0; i < end; ++i) {
 			if (particles[i].checkBounds()) {
 				particles.erase(particles.begin() + i);
 				i--;
 				end--;
 			}
-		}
+		}*/
 
-		for (int i = 0; i < 100; i++) {
+		/*for (auto it = particles.begin(); it != particles.end(); ) {
+			if ((*it).checkBounds()) {
+				it = particles.erase(it);
+			}
+			else {
+				++it;
+			}
+		}*/
+
+		for (int i = 0; i < 10000; i++) {
 			Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
 			particles.push_back(newParticle);
 		}
@@ -154,9 +164,18 @@ int main()
 
 		while(accumulator >= dt) {
 			vertices.clear();
-			for (size_t i = 0; i < particles.size(); ++i) {
+			/*for (size_t i = 0; i < particles.size(); ++i) {
 				particles[i].update(dt);
 				particles[i].pushData(vertices);
+			}*/
+			for (auto it = particles.begin(); it != particles.end(); it++) {
+				it->update(dt);
+				if (it->checkBounds()) {
+					it = particles.erase(it);
+					it--;
+					continue;
+				}
+				it->pushData(vertices);
 			}
 
 			accumulator -= dt;
