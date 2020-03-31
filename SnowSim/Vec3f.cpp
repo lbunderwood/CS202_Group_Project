@@ -41,19 +41,15 @@ void Vec3f::setVec(int x, int y, int z)
 // returns result of dot operation
 float Vec3f::dot(const Vec3f& vec) const
 {
-	std::vector<float> temp = vec.getVec();
-	return x_ * temp[0] + y_ * temp[1] + z_ * temp[2];
+	return x_ * vec.x_ + y_ * vec.y_ + z_ * vec.z_;
 }
 
 // returns result of dot operation
 Vec3f Vec3f::cross(const Vec3f& vec) const
 {
-	std::vector<float> temp = vec.getVec();
-	Vec3f output(
-		y_ * temp[2] - temp[1] * z_,
-		z_ * temp[0] - temp[2] * x_,
-		x_ * temp[1] - temp[0] * y_);
-	return output;
+	return Vec3f(y_ * vec.z_ - vec.y_ * z_,
+				 z_ * vec.x_ - vec.z_ * x_,
+				 x_ * vec.y_ - vec.x_ * y_);
 }
 
 // returns length of vector
@@ -76,67 +72,41 @@ Vec3f Vec3f::unit() const
 // prototype for vector addition operator
 Vec3f operator +(const Vec3f& vec1, const Vec3f& vec2)
 {
-	std::vector<float> temp1 = vec1.getVec();
-	std::vector<float> temp2 = vec2.getVec();
-	Vec3f output(
-		temp1[0] + temp2[0],
-		temp1[1] + temp2[1],
-		temp1[2] + temp2[2]);
-	return output;
+	return Vec3f(vec1.x_ + vec2.x_, vec1.y_ + vec2.y_, vec1.z_ + vec2.z_);
 }
 
 // prototype for vector subtraction operator
 Vec3f operator -(const Vec3f& vec1, const Vec3f& vec2)
 {
-	std::vector<float> temp1 = vec1.getVec();
-	std::vector<float> temp2 = vec2.getVec();
-	Vec3f output(
-		temp1[0] - temp2[0],
-		temp1[1] - temp2[1],
-		temp1[2] - temp2[2]);
-	return output;
+	return Vec3f(vec1.x_ - vec2.x_, vec1.y_ - vec2.y_, vec1.z_ - vec2.z_);
 }
 
 // prototype for scalar multiplication by float operator
 Vec3f operator *(float num, const Vec3f& vec)
 {
-	std::vector<float> temp = vec.getVec();
-	Vec3f output(
-		temp[0] * num,
-		temp[1] * num,
-		temp[2] * num);
-	return output;
+	return Vec3f(vec.x_ * num, vec.y_ * num, vec.z_ * num);
 }
 
 // prototype for scalar multiplication by int operator
 Vec3f operator *(int num, const Vec3f& vec)
 {
-	std::vector<float> temp = vec.getVec();
-	Vec3f output(
-		temp[0] * num,
-		temp[1] * num,
-		temp[2] * num);
-	return output;
+	return Vec3f(vec.x_ * num, vec.y_ * num, vec.z_ * num);
 }
 
 // prototype for vector comparison ==
 bool operator ==(const Vec3f& vec1, const Vec3f& vec2)
 {
-	std::vector<float> temp1 = vec1.getVec();
-	std::vector<float> temp2 = vec2.getVec();
-	return temp1[0] == temp2[0] &&
-		   temp1[1] == temp2[1] &&
-		   temp1[2] == temp2[2];
+	return vec1.x_ == vec2.x_ &&
+		   vec1.y_ == vec2.y_ &&
+		   vec1.z_ == vec2.z_;
 }
 
 // prototype for vector comparison !=
 bool operator !=(const Vec3f& vec1, const Vec3f& vec2)
 {
-	std::vector<float> temp1 = vec1.getVec();
-	std::vector<float> temp2 = vec2.getVec();
-	return temp1[0] != temp2[0] ||
-		   temp1[1] != temp2[1] ||
-		   temp1[2] != temp2[2];
+	return  vec1.x_ != vec2.x_ ||
+			vec1.y_ != vec2.y_ ||
+			vec1.z_ != vec2.z_;
 }
 
 // prototype for vector comparison strictly greater than
