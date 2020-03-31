@@ -20,7 +20,7 @@ Field::Field()
 // get vector at position x, y using the opengl coordinate system
 Vec3f Field::getForce(float x, float y) const
 {
-	return field_[floor((x + 1.0f) * 10.0f)][floor((y + 1.0f) * 10.0f)];
+	return field_[floor(((double)x + 1.0f) * 10.0f)][floor(((double)y + 1.0f) * 10.0f)];
 }
 
 // sets wind speed for whole field
@@ -30,8 +30,19 @@ void Field::setWind(float windspeed)
 	{
 		for (auto m : n)
 		{
-			auto temp = m.getVec();
-			m.setVec(windspeed, temp[1], temp[2]);
+			m.setVec(windspeed, m.y_, m.z_);
+		}
+	}
+}
+
+// sets wind speed for part of the field
+void Field::setWind(float windspeed, float yMin, float yMax)
+{
+	for (auto n : field_)
+	{
+		for (int i = floor(((double)yMin + 1.0) * 10.0); i < floor(((double)yMax + 1.0) * 10.0); i++)
+		{
+			n[i].setVec(windspeed, n[i].y_, n[i].z_);
 		}
 	}
 }

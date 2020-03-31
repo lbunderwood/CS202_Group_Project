@@ -24,6 +24,9 @@ public:
 	// sets wind speed for whole field
 	void setWind(float windspeed);
 
+	// sets wind speed for part of the field
+	void setWind(float windspeed, float yMin, float yMax);
+
 private:
 
 	// our actual field data. Stored as (x,y)
