@@ -39,10 +39,13 @@ public:
 	void setForce(float x, float y, float z);
 	void setForce(Vec3f nForce);
 
+	// updates particle data using given timestep dt
 	void update(const double& dt);
 
+	// pushes particle data into a given vector
 	void pushData(std::vector<float>& vertices);
 
+	// returns true if position is out of bounds
 	bool checkBounds();
 
 private:

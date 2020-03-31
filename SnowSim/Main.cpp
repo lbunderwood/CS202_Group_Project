@@ -16,6 +16,7 @@
 #include <random>
 
 
+// Code for vertex shader
 const char* vertexShaderSource = 
 "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
@@ -25,6 +26,7 @@ const char* vertexShaderSource =
 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "}\0";
 
+// Code for fragment shader
 const char* fragmentShaderSource =
 "#version 330 core\n"
 "out vec4 FragColor;\n"
@@ -48,24 +50,29 @@ void processInput(GLFWwindow* window) {
 
 int main()
 {
+	// Random number generator for testing particle emission
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<float> dist(-1.0f, 1.0f);
 
+	// Linked list containing Particle objects
+	// Testing list for faster element erasing
+	// Initialized with 100 Particles
 	std::list<Particle> particles;
 	for (int i = 0; i < 100; i++) {
 		Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
 		particles.push_back(newParticle);
 	}
 
+	// vector<float> vertices
+	// contains particle data values
+	// (what is actually passed to OpenGL functions)
+	// pushData method pushes Particle data into a vector
 	std::vector<float> vertices;
 	for (auto p : particles) {
 		p.pushData(vertices);
 	}
 
-	/*for (auto v : vertices) {
-		std::cout << v << "\n";
-	}*/
 
 	glfwInit();
 	//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
@@ -85,6 +92,8 @@ int main()
 		return -1;
 	}
 
+
+	// Enabling depth testing and circular points
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_POINT_SMOOTH);
 
@@ -92,6 +101,7 @@ int main()
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+	// Size of rendered points
 	glPointSize(2.0f);
 
 	unsigned int vao;
@@ -124,30 +134,16 @@ int main()
 	glAttachShader(program, fragmentShader);
 	glLinkProgram(program);
 
+	// Timestep for 60 updates/sec
 	const double dt = 1.0 / 60.0;
 
+	// Setup for time accumulator
 	double currentTime = glfwGetTime();
 	double accumulator = 0.0;
 
 	while (!glfwWindowShouldClose(window)) {
-		/*int end = particles.size();
-		for (int i = 0; i < end; ++i) {
-			if (particles[i].checkBounds()) {
-				particles.erase(particles.begin() + i);
-				i--;
-				end--;
-			}
-		}*/
 
-		/*for (auto it = particles.begin(); it != particles.end(); ) {
-			if ((*it).checkBounds()) {
-				it = particles.erase(it);
-			}
-			else {
-				++it;
-			}
-		}*/
-
+		// Adds some number of particles each loop
 		for (int i = 0; i < 10000; i++) {
 			Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
 			particles.push_back(newParticle);
@@ -156,18 +152,24 @@ int main()
 		processInput(window);
 
 
+		// More stuff for time accumulator
 		double newTime = glfwGetTime();
 		double frameTime = newTime - currentTime;
 		currentTime = newTime;
 
 		accumulator += frameTime;
 
+		// Once time accumulated passes timestep,
+		// update particles
 		while(accumulator >= dt) {
+
+			// clear vertices vector
 			vertices.clear();
-			/*for (size_t i = 0; i < particles.size(); ++i) {
-				particles[i].update(dt);
-				particles[i].pushData(vertices);
-			}*/
+
+			// For each Particle in linked list:
+			// update position using dt timestep
+			// if out of bounds, erase Particle
+			// push data into vertices format for OpenGL
 			for (auto it = particles.begin(); it != particles.end(); it++) {
 				it->update(dt);
 				if (it->checkBounds()) {
@@ -178,6 +180,7 @@ int main()
 				it->pushData(vertices);
 			}
 
+			// subtract from time accumulated
 			accumulator -= dt;
 		}
 
@@ -191,6 +194,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glUseProgram(program);
 		glBindVertexArray(vao);
+
+		// Draw points
 		glDrawArrays(GL_POINTS, 0, particles.size());
 
 		glfwSwapBuffers(window);
@@ -198,7 +203,6 @@ int main()
 
 		glBindVertexArray(0);
 
-		//std::cout << "N = " << particles.size() << "\n";
 	}
 
 	glfwTerminate();
