@@ -37,6 +37,10 @@ public:
 	// returns the unit vector
 	Vec3f unit() const;
 
+	// compound assignment operator prototypes
+	Vec3f& operator+=(const Vec3f& oldVec);
+	Vec3f& operator-=(const Vec3f& oldVec);
+
 //private:
 
 	float x_;

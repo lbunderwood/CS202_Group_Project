@@ -162,3 +162,15 @@ bool operator >=(const Vec3f& vec1, const Vec3f& vec2)
 {
 	return vec1.length() >= vec2.length();
 }
+
+// definition for compound assignment operator +=
+Vec3f& Vec3f::operator+=(const Vec3f& oldVec)
+{
+	*this = oldVec + *this;
+}
+
+// definition for compound assignment operator -=
+Vec3f& Vec3f::operator-=(const Vec3f& oldVec)
+{
+	*this = oldVec - *this;
+}
