@@ -16,7 +16,6 @@ public:
 	// Constructors
 	Vec3f();
 	Vec3f(float x, float y, float z);
-	Vec3f(int x, int y, int z);
 
 	// returns vec of the values
 	std::vector<float> getVec() const;

@@ -59,8 +59,8 @@ int main()
 	// Testing list for faster element erasing
 	// Initialized with 100 Particles
 	std::list<Particle> particles;
-	for (int i = 0; i < 100; i++) {
-		Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
+	for (int i = 0; i < 10; i++) {
+		Particle newParticle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen));
 		particles.push_back(newParticle);
 	}
 
@@ -141,11 +141,14 @@ int main()
 	double currentTime = glfwGetTime();
 	double accumulator = 0.0;
 
+	// set up force field
+	Field forceField;
+
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop
-		for (int i = 0; i < 10000; i++) {
-			particles.push_back(Particle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen)));
+		for (int i = 0; i < 10; i++) {
+			particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
 		}
 
 		processInput(window);
@@ -170,7 +173,7 @@ int main()
 			// if out of bounds, erase Particle
 			// push data into vertices format for OpenGL
 			for (auto it = particles.begin(); it != particles.end(); it++) {
-				it->update(dt);
+				it->update(dt, forceField);
 				if (it->checkBounds()) {
 					it = particles.erase(it);
 					//it--;

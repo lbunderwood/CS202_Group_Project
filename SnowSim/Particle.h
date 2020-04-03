@@ -9,6 +9,7 @@
 #define PARTICLE_H
 
 #include "Vec3f.h"
+#include "Field.h"
 
 class Particle
 {
@@ -40,7 +41,7 @@ public:
 	void setForce(Vec3f nForce);
 
 	// updates particle data using given timestep dt
-	void update(const double& dt);
+	void update(const double& dt, const Field& f);
 
 	// pushes particle data into a given vector
 	void pushData(std::vector<float>& vertices);

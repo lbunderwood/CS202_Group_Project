@@ -19,7 +19,10 @@ public:
 	Field();
 
 	// get vector at position x, y
-	Vec3f getForce(float x, float y) const;
+	Vec3f getForce(float x, float y, float z) const;
+
+	// get vector at position given by Vec3f
+	Vec3f getForce(const Vec3f& vec) const;
 
 	// sets wind speed for whole field
 	void setWind(float windspeed);
@@ -30,7 +33,7 @@ public:
 private:
 
 	// our actual field data. Stored as (x,y)
-	std::vector<std::vector<Vec3f>> field_;
+	std::vector<std::vector<std::vector<Vec3f>>> field_;
 
 };
 

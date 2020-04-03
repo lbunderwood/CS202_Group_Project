@@ -13,7 +13,7 @@ Particle::Particle() {}
 
 Particle::Particle(float x, float y, float z) {
     pos_.setVec(x, y, z);
-	force_.setVec(0.0f, -9.8f, 0.0f);
+	force_.setVec(0.0f, 0.0f, 0.0f);
 }
 
 
@@ -72,14 +72,11 @@ void Particle::setForce(Vec3f nForce)
     force_ = nForce;
 }
 
-void Particle::update(const double& dt)
+void Particle::update(const double& dt, const Field& f)
 {
-	vel_.x_ += (force_.x_ * dt);
-	vel_.y_ += (force_.y_ * dt);
-	vel_.z_ += (force_.z_ * dt);
-	pos_.x_ += (vel_.x_ * dt);
-	pos_.y_ += (vel_.y_ * dt);
-	pos_.z_ += (vel_.z_ * dt);
+	force_ = f.getForce(pos_);
+	vel_ += ((float)dt * force_);
+	pos_ += ((float)dt * vel_);
 }
 
 

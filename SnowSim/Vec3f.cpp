@@ -13,9 +13,6 @@ Vec3f::Vec3f() : x_(0.0f), y_(0.0f), z_(0.0f) {}
 // Float-valued constructor
 Vec3f::Vec3f(float x, float y, float z) : x_(x), y_(y), z_(z) {}
 
-// Int-valued constructor
-Vec3f::Vec3f(int x, int y, int z) : x_(x), y_(y), z_(z) {}
-
 // returns vec of the values
 std::vector<float> Vec3f::getVec() const
 {

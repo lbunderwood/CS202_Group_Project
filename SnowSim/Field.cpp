@@ -11,16 +11,19 @@
 // Default constructor. Sets everything to only gravity
 Field::Field()
 {
-	for (int x = 0; x < 20; x++)
-	{
-		std::vector<Vec3f> TempVec(20, Vec3f(0, -9.81, 0));
-	}
+	field_ = std::vector<std::vector<std::vector<Vec3f>>>(21, std::vector<std::vector<Vec3f>>(21, std::vector<Vec3f>(21, Vec3f(0, -0.5f, 0))));
 }
 
-// get vector at position x, y using the opengl coordinate system
-Vec3f Field::getForce(float x, float y) const
+// get vector at position x, y, z using the opengl coordinate system
+Vec3f Field::getForce(float x, float y, float z) const
 {
-	return field_[floor(((double)x + 1.0f) * 10.0f)][floor(((double)y + 1.0f) * 10.0f)];
+	return field_[floor(((double)x + 1.0) * 10.0)][floor(((double)y + 1.0) * 10.0)][floor(((double)z + 1.0) * 10.0)];
+}
+
+// get vector at position given by Vec3f
+Vec3f Field::getForce(const Vec3f& vec) const
+{
+	return field_[floor(((double)vec.x_ + 1.0) * 10.0)][floor(((double)vec.y_ + 1.0) * 10.0)][floor(((double)vec.z_ + 1.0) * 10.0)];
 }
 
 // sets wind speed for whole field
@@ -30,7 +33,10 @@ void Field::setWind(float windspeed)
 	{
 		for (auto m : n)
 		{
-			m.setVec(windspeed, m.y_, m.z_);
+			for (auto l : m)
+			{
+				l.x_ = windspeed;
+			}
 		}
 	}
 }
@@ -40,9 +46,12 @@ void Field::setWind(float windspeed, float yMin, float yMax)
 {
 	for (auto n : field_)
 	{
-		for (int i = floor(((double)yMin + 1.0) * 10.0); i < floor(((double)yMax + 1.0) * 10.0); i++)
+		for (auto m : n)
 		{
-			n[i].setVec(windspeed, n[i].y_, n[i].z_);
+			for (int i = floor(((double)yMin + 1.0) * 10.0); i < floor(((double)yMax + 1.0) * 10.0); i++)
+			{
+				m[i].x_ = windspeed;
+			}
 		}
 	}
 }
