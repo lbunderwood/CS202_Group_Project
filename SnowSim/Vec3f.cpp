@@ -137,10 +137,12 @@ bool operator >=(const Vec3f& vec1, const Vec3f& vec2)
 Vec3f& Vec3f::operator+=(const Vec3f& oldVec)
 {
 	*this = oldVec + *this;
+	return *this;
 }
 
 // definition for compound assignment operator -=
 Vec3f& Vec3f::operator-=(const Vec3f& oldVec)
 {
 	*this = oldVec - *this;
+	return *this;
 }

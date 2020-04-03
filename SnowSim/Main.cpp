@@ -145,8 +145,7 @@ int main()
 
 		// Adds some number of particles each loop
 		for (int i = 0; i < 10000; i++) {
-			Particle newParticle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen));
-			particles.push_back(newParticle);
+			particles.push_back(Particle(dist(gen), dist(gen) * 0.1 + 1.0, dist(gen)));
 		}
 
 		processInput(window);
@@ -174,7 +173,7 @@ int main()
 				it->update(dt);
 				if (it->checkBounds()) {
 					it = particles.erase(it);
-					it--;
+					//it--;
 					continue;
 				}
 				it->pushData(vertices);
