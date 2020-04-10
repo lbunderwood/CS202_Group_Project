@@ -30,6 +30,15 @@ public:
 	// sets wind speed for part of the field
 	void setWind(float windspeed, float yMin, float yMax);
 
+	// sets wind speed for whole field using a Vec3f
+	void setWind(const Vec3f& wind);
+
+	// sets wind speed for part of the field using a Vec3f
+	void setWind(const Vec3f& wind, float yMin, float yMax);
+
+	// sets wind speed for part of the field using Vec3f for wind and region
+	void setWind(const Vec3f& wind, const Vec3f& minCorner, const Vec3f& maxCorner);
+
 private:
 
 	// our actual field data. Stored as (x,y)
