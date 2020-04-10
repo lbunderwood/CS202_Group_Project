@@ -143,7 +143,10 @@ int main()
 
 	// set up force field
 	Field forceField;
-
+	forceField.setWind(5.0f, -1.0f, 0.5f);
+	forceField.setWind(-1.0f, -0.5f, 0.0f);
+	forceField.setWind(0.5f, 0.0f, 0.5f);
+	forceField.setWind(-0.1f, 0.5f, 1.0f);
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop

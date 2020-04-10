@@ -29,11 +29,11 @@ Vec3f Field::getForce(const Vec3f& vec) const
 // sets wind speed for whole field
 void Field::setWind(float windspeed)
 {
-	for (auto n : field_)
+	for (auto& n : field_)
 	{
-		for (auto m : n)
+		for (auto& m : n)
 		{
-			for (auto l : m)
+			for (auto& l : m)
 			{
 				l.x_ = windspeed;
 			}
@@ -44,14 +44,15 @@ void Field::setWind(float windspeed)
 // sets wind speed for part of the field
 void Field::setWind(float windspeed, float yMin, float yMax)
 {
-	for (auto n : field_)
+	for (auto& n : field_)
 	{
-		for (auto m : n)
+		for (int i = floor(((double)yMin + 1.0) * 10.0); i < floor(((double)yMax + 1.0) * 10.0); i++)
 		{
-			for (int i = floor(((double)yMin + 1.0) * 10.0); i < floor(((double)yMax + 1.0) * 10.0); i++)
+			for (auto& m : n[i])
 			{
-				m[i].x_ = windspeed;
+				m.x_ = windspeed;
 			}
 		}
 	}
+	
 }
