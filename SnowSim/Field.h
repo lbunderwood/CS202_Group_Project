@@ -6,6 +6,7 @@
 // header for Field class
 
 #include<vector>
+#include<random>
 #include"Vec3f.h"
 
 #ifndef FIELD_H
@@ -17,6 +18,9 @@ public:
 
 	// Default constructor. Sets everything to only gravity
 	Field();
+
+	// Contructor for custom sizes
+	Field(int x, int y, int z);
 
 	// get vector at position x, y
 	Vec3f getForce(float x, float y, float z) const;
@@ -30,11 +34,26 @@ public:
 	// sets wind speed for part of the field
 	void setWind(float windspeed, float yMin, float yMax);
 
+	// generates random unit vectors for use in Perlin noise
+	void genGradients();
+
+	// adds noise vectors to current Field based on values from Perlin function
+	void addPerlin(const Field& g);
+
 private:
 
 	// our actual field data. Stored as (x,y)
 	std::vector<std::vector<std::vector<Vec3f>>> field_;
 
 };
+
+// linear interpolation function (w is weight)
+float lerp(float a, float b, float w);
+
+// returns dot product of distance vector and gradient for Perlin function
+float dotDistGradient(int ix, int iy, int iz, float x, float y, float z, const Field& g);
+
+// Perlin noise function
+float perlin(float x, float y, float z, const Field& g);
 
 #endif

@@ -6,6 +6,7 @@
 // source for Particle class
 
 #include "Particle.h"
+#include <cmath>
 
 
 Particle::Particle() {}
@@ -84,11 +85,16 @@ void Particle::pushData(std::vector<float>& vertices)
 {
 	vertices.push_back(pos_.x_);
 	vertices.push_back(pos_.y_);
-	vertices.push_back(pos_.z_);
+	vertices.push_back(-1 * pos_.z_);
 }
 
 
 bool Particle::checkBounds()
 {
-	return pos_.y_ < -1.0f;
+	if (abs(pos_.x_) > 1.0f ||
+		abs(pos_.y_) > 1.0f ||
+		abs(pos_.z_) > 1.0f) {
+		return 1;
+	}
+	return 0;
 }

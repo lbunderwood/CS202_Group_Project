@@ -60,7 +60,7 @@ int main()
 	// Initialized with 100 Particles
 	std::list<Particle> particles;
 	for (int i = 0; i < 10; i++) {
-		Particle newParticle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen));
+		Particle newParticle(dist(gen) * 0.1, dist(gen) * 0.1f + 0.9f, dist(gen) * 0.1);
 		particles.push_back(newParticle);
 	}
 
@@ -144,11 +144,17 @@ int main()
 	// set up force field
 	Field forceField;
 
+	// Perlin Noise start
+	Field gradients(24, 24, 24);
+	gradients.genGradients();
+	forceField.addPerlin(gradients);
+	// Perlin Noise end
+
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop
-		for (int i = 0; i < 10; i++) {
-			particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
+		for (int i = 0; i < 100; i++) {
+			particles.push_back(Particle(dist(gen) * 0.1, dist(gen) * 0.1f + 0.9f, dist(gen) * 0.1));
 		}
 
 		processInput(window);
