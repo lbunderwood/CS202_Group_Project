@@ -59,7 +59,7 @@ int main()
 	// Testing list for faster element erasing
 	// Initialized with 100 Particles
 	std::list<Particle> particles;
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 100; i++) {
 		Particle newParticle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen));
 		particles.push_back(newParticle);
 	}
@@ -143,14 +143,18 @@ int main()
 
 	// set up force field
 	Field forceField;
-	forceField.setWind(5.0f, -1.0f, 0.5f);
-	forceField.setWind(-1.0f, -0.5f, 0.0f);
-	forceField.setWind(0.5f, 0.0f, 0.5f);
-	forceField.setWind(-0.1f, 0.5f, 1.0f);
+	
+	forceField.setWind(Vec3f(-0.5f, 0.0f, -1.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(1.0f, 1.0f, 1.0f));
+	forceField.setWind(Vec3f(-1.0f, 0.0f, 0.5f), Vec3f(0.0f, 0.0f, -1.0f), Vec3f(1.0f, 1.0f, 0.0f));
+	forceField.setWind(Vec3f(0.5f, 0.0f, 1.0f), Vec3f(-1.0f, 0.0f, -1.0f), Vec3f(0.0f, 1.0f, 0.0f));
+	forceField.setWind(Vec3f(1.0f, 0.0f, -0.5f), Vec3f(-1.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 1.0f));
+
+	 forceField.setWind(Vec3f(0.0f, 1.0f, 0.0f), Vec3f(-1.0f, -1.0f, -1.0f), Vec3f(1.0f, 0.0f, 1.0f));
+
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 2; i++) {
 			particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
 		}
 
