@@ -91,10 +91,5 @@ void Particle::pushData(std::vector<float>& vertices)
 
 bool Particle::checkBounds()
 {
-	if (abs(pos_.x_) > 1.0f ||
-		abs(pos_.y_) > 1.0f ||
-		abs(pos_.z_) > 1.0f) {
-		return 1;
-	}
-	return 0;
+	return pos_.y_ < -1.0f || pos_.x_ > 1.0f || pos_.x_ < -1.0f || pos_.z_ > 1.0f || pos_.z_ < -1.0f;
 }

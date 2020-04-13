@@ -59,8 +59,8 @@ int main()
 	// Testing list for faster element erasing
 	// Initialized with 100 Particles
 	std::list<Particle> particles;
-	for (int i = 0; i < 10; i++) {
-		Particle newParticle(dist(gen) * 0.1, dist(gen) * 0.1f + 0.9f, dist(gen) * 0.1);
+	for (int i = 0; i < 100; i++) {
+		Particle newParticle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen));
 		particles.push_back(newParticle);
 	}
 
@@ -143,6 +143,14 @@ int main()
 
 	// set up force field
 	Field forceField;
+	
+	forceField.setWind(Vec3f(-0.5f, 0.0f, -1.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(1.0f, 1.0f, 1.0f));
+	forceField.setWind(Vec3f(-1.0f, 0.0f, 0.5f), Vec3f(0.0f, 0.0f, -1.0f), Vec3f(1.0f, 1.0f, 0.0f));
+	forceField.setWind(Vec3f(0.5f, 0.0f, 1.0f), Vec3f(-1.0f, 0.0f, -1.0f), Vec3f(0.0f, 1.0f, 0.0f));
+	forceField.setWind(Vec3f(1.0f, 0.0f, -0.5f), Vec3f(-1.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 1.0f));
+
+	 forceField.setWind(Vec3f(0.0f, 1.0f, 0.0f), Vec3f(-1.0f, -1.0f, -1.0f), Vec3f(1.0f, 0.0f, 1.0f));
+
 
 	// Perlin Noise start
 	Field gradients(24, 24, 24);
