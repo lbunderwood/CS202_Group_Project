@@ -60,7 +60,7 @@ int main()
 	// Initialized with 100 Particles
 	std::list<Particle> particles;
 	for (int i = 0; i < 100; i++) {
-		Particle newParticle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen));
+		Particle newParticle(Particle(dist(gen) * 0.05, dist(gen) * 0.05f + 0.95f, dist(gen) * 0.05));
 		particles.push_back(newParticle);
 	}
 
@@ -102,7 +102,7 @@ int main()
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	// Size of rendered points
-	glPointSize(2.0f);
+	glPointSize(0.01f);
 
 	unsigned int vao;
 	glGenVertexArrays(1, &vao);
@@ -143,26 +143,27 @@ int main()
 
 	// set up force field
 	Field forceField;
+
+	// PERLIN NOISE START
+	Field gradients(24, 24, 24);
+	gradients.genGradients();
+	forceField.addPerlin(gradients);
+	// PERLIN NOISE END
 	
-	forceField.setWind(Vec3f(-0.5f, 0.0f, -1.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(1.0f, 1.0f, 1.0f));
+	// VORTEX FIELD START
+	/*forceField.setWind(Vec3f(-0.5f, 0.0f, -1.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(1.0f, 1.0f, 1.0f));
 	forceField.setWind(Vec3f(-1.0f, 0.0f, 0.5f), Vec3f(0.0f, 0.0f, -1.0f), Vec3f(1.0f, 1.0f, 0.0f));
 	forceField.setWind(Vec3f(0.5f, 0.0f, 1.0f), Vec3f(-1.0f, 0.0f, -1.0f), Vec3f(0.0f, 1.0f, 0.0f));
 	forceField.setWind(Vec3f(1.0f, 0.0f, -0.5f), Vec3f(-1.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 1.0f));
 
-	 forceField.setWind(Vec3f(0.0f, 1.0f, 0.0f), Vec3f(-1.0f, -1.0f, -1.0f), Vec3f(1.0f, 0.0f, 1.0f));
-
-
-	// Perlin Noise start
-	Field gradients(24, 24, 24);
-	gradients.genGradients();
-	forceField.addPerlin(gradients);
-	// Perlin Noise end
+	forceField.setWind(Vec3f(0.0f, 1.0f, 0.0f), Vec3f(-1.0f, -1.0f, -1.0f), Vec3f(1.0f, 0.0f, 1.0f));*/
+	// VORTEX FIELD END
 
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop
 		for (int i = 0; i < 100; i++) {
-			particles.push_back(Particle(dist(gen) * 0.1, dist(gen) * 0.1f + 0.9f, dist(gen) * 0.1));
+			particles.push_back(Particle(dist(gen) * 0.05, dist(gen) * 0.05f + 0.95f, dist(gen) * 0.05));
 		}
 
 		processInput(window);
