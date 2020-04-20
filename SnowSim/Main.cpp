@@ -15,6 +15,15 @@
 #include <list>
 #include <random>
 
+namespace
+{
+	// set up force field
+	Field forceField;
+
+	// Current window size
+	int windowSizeX{ 1280 };
+	int windowSizeY{ 720 };
+}
 
 // Code for vertex shader
 const char* vertexShaderSource = 
@@ -38,6 +47,8 @@ const char* fragmentShaderSource =
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
+	windowSizeX = width;
+	windowSizeY = height;
 }
 
 
@@ -47,6 +58,20 @@ void processInput(GLFWwindow* window) {
 	}
 }
 
+// callback to manipulate field using cursor. Needs access to field, so it's here
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+	static Field previousField = forceField;
+	forceField = previousField;
+
+	double realX = xpos / (windowSizeX / 2) - 1;
+	double realY = ypos / (windowSizeY / -2) + 1;
+
+	forceField.setField(Vec3f(1, 2, 0), Vec3f(realX, realY, -1), Vec3f(realX + 0.2, realY + 0.2, 1));
+	forceField.setField(Vec3f(-1, 2, 0), Vec3f(realX - 0.2, realY, -1), Vec3f(realX, realY + 0.2, 1));
+	forceField.setField(Vec3f(-1, -2, 0), Vec3f(realX - 0.2, realY - 0.2, -1), Vec3f(realX, realY, 1));
+	forceField.setField(Vec3f(1, -2, 0), Vec3f(realX, realY - 0.2, -1), Vec3f(realX + 0.2, realY, 1));
+}
 
 int main()
 {
@@ -141,13 +166,12 @@ int main()
 	double currentTime = glfwGetTime();
 	double accumulator = 0.0;
 
-	// set up force field
-	Field forceField;
+	
 
 	// PERLIN NOISE START
-	Field gradients(24, 24, 24);
+	/*Field gradients(24, 24, 24);
 	gradients.genGradients();
-	forceField.addPerlin(gradients);
+	forceField.addPerlin(gradients);*/
 	// PERLIN NOISE END
 	
 	// VORTEX FIELD START
@@ -162,12 +186,18 @@ int main()
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop
-		for (int i = 0; i < 100; i++) {
+		// PERLIN NOISE START
+		/*for (int i = 0; i < 100; i++) {
 			particles.push_back(Particle(dist(gen) * 0.05, dist(gen) * 0.05f + 0.95f, dist(gen) * 0.05));
+		}*/
+		// PERLIN NOISE END
+		//GENERIC SNOWFALL START
+		for (int i = 0; i < 3; i++) {
+			particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
 		}
+		//GENERIC SNOWFALL END
 
 		processInput(window);
-
 
 		// More stuff for time accumulator
 		double newTime = glfwGetTime();
@@ -177,6 +207,8 @@ int main()
 		accumulator += frameTime;
 
 		// Once time accumulated passes timestep,
+		// get mouse input
+		glfwSetCursorPosCallback(window, mouse_callback);
 		// update particles
 		while(accumulator >= dt) {
 

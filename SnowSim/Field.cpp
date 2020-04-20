@@ -47,22 +47,6 @@ void Field::setWind(float windspeed)
 	}
 }
 
-// sets wind speed for part of the field in the X direction only
-void Field::setWind(float windspeed, float yMin, float yMax)
-{
-	for (auto& n : field_)
-	{
-		for (int i = floor(((double)yMin + 1.0) * 10.0); i < floor(((double)yMax + 1.0) * 10.0); i++)
-		{
-			for (auto& m : n[i])
-			{
-				m.x_ = windspeed;
-			}
-		}
-	}
-	
-}
-
 // sets wind speed for whole field using a Vec3f
 void Field::setWind(const Vec3f& wind)
 {
@@ -78,21 +62,6 @@ void Field::setWind(const Vec3f& wind)
 	}
 }
 
-// sets wind speed for part of the field using a Vec3f
-void Field::setWind(const Vec3f& wind, float yMin, float yMax)
-{
-	for (auto& n : field_)
-	{
-		for (int i = floor(((double)yMin + 1.0) * 10.0); i < floor(((double)yMax + 1.0) * 10.0); i++)
-		{
-			for (auto& m : n[i])
-			{
-				m += wind;
-			}
-		}
-	}
-}
-
 // sets wind speed for part of the field using Vec3f for wind and region
 void Field::setWind(const Vec3f& wind, const Vec3f& minCorner, const Vec3f& maxCorner)
 {
@@ -103,6 +72,21 @@ void Field::setWind(const Vec3f& wind, const Vec3f& minCorner, const Vec3f& maxC
 			for (int k = floor(((double)minCorner.z_ + 1.0) * 10.0); k < floor(((double)maxCorner.z_ + 1.0) * 10.0); k++)
 			{
 				field_[i][j][k] += wind;
+			}
+		}
+	}
+}
+
+// sets field value for part of the field using Vec3f for wind and region
+void Field::setField(const Vec3f& vector, const Vec3f& minCorner, const Vec3f& maxCorner)
+{
+	for (int i = floor(((double)minCorner.x_ + 1.0) * 10.0); i < floor(((double)maxCorner.x_ + 1.0) * 10.0); i++)
+	{
+		for (int j = floor(((double)minCorner.y_ + 1.0) * 10.0); j < floor(((double)maxCorner.y_ + 1.0) * 10.0); j++)
+		{
+			for (int k = floor(((double)minCorner.z_ + 1.0) * 10.0); k < floor(((double)maxCorner.z_ + 1.0) * 10.0); k++)
+			{
+				field_[i][j][k] = vector;
 			}
 		}
 	}

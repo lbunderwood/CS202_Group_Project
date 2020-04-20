@@ -8,6 +8,8 @@
 #include<vector>
 #include<random>
 #include"Vec3f.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 #ifndef FIELD_H
 #define FIELD_H
@@ -22,7 +24,7 @@ public:
 	// Contructor for custom sizes
 	Field(int x, int y, int z);
 
-	// get vector at position x, y
+	// get vector at position x, y, z
 	Vec3f getForce(float x, float y, float z) const;
 
 	// get vector at position given by Vec3f
@@ -31,17 +33,14 @@ public:
 	// sets wind speed for whole field
 	void setWind(float windspeed);
 
-	// sets wind speed for part of the field
-	void setWind(float windspeed, float yMin, float yMax);
-
 	// sets wind speed for whole field using a Vec3f
 	void setWind(const Vec3f& wind);
 
-	// sets wind speed for part of the field using a Vec3f
-	void setWind(const Vec3f& wind, float yMin, float yMax);
-
 	// sets wind speed for part of the field using Vec3f for wind and region
 	void setWind(const Vec3f& wind, const Vec3f& minCorner, const Vec3f& maxCorner);
+
+	// sets field value for part of the field using Vec3f for wind and region
+	void setField(const Vec3f& vector, const Vec3f& minCorner, const Vec3f& maxCorner);
 
 	// generates random unit vectors for use in Perlin noise
 	void genGradients();
