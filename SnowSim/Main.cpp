@@ -17,9 +17,6 @@
 
 namespace
 {
-	// set up force field
-	Field forceField;
-
 	// Current window size
 	int windowSizeX{ 1280 };
 	int windowSizeY{ 720 };
@@ -59,32 +56,20 @@ void processInput(GLFWwindow* window) {
 }
 
 // callback to manipulate field using cursor. Needs access to field, so it's here
-void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+void blowFromCursor(double xpos, double ypos, Field& field)
 {
-	static Field previousField = forceField;
-	forceField = previousField;
+	static Field previousField = field;
+	field = previousField;
 
 	double realX = xpos / (windowSizeX / 2) - 1;
 	double realY = ypos / (windowSizeY / -2) + 1;
 
-	forceField.setField(Vec3f(1, 2, 0), Vec3f(realX, realY, -1), Vec3f(realX + 0.2, realY + 0.2, 1));
-	forceField.setField(Vec3f(-1, 2, 0), Vec3f(realX - 0.2, realY, -1), Vec3f(realX, realY + 0.2, 1));
-	forceField.setField(Vec3f(-1, -2, 0), Vec3f(realX - 0.2, realY - 0.2, -1), Vec3f(realX, realY, 1));
-	forceField.setField(Vec3f(1, -2, 0), Vec3f(realX, realY - 0.2, -1), Vec3f(realX + 0.2, realY, 1));
+	field.setField(Vec3f(1, 2, 0), Vec3f(realX, realY, -1), Vec3f(realX + 0.2, realY + 0.2, 1));
+	field.setField(Vec3f(-1, 2, 0), Vec3f(realX - 0.2, realY, -1), Vec3f(realX, realY + 0.2, 1));
+	field.setField(Vec3f(-1, -2, 0), Vec3f(realX - 0.2, realY - 0.2, -1), Vec3f(realX, realY, 1));
+	field.setField(Vec3f(1, -2, 0), Vec3f(realX, realY - 0.2, -1), Vec3f(realX + 0.2, realY, 1));
 }
 
-// callback for mouse entering screen
-void mouse_enter_callback(GLFWwindow* window, int entered)
-{
-	if (entered)
-	{
-		glfwSetCursorPosCallback(window, mouse_callback);
-	}
-	else
-	{
-		glfwSetCursorPosCallback(window, NULL);
-	}
-}
 
 int main()
 {
@@ -138,7 +123,6 @@ int main()
 	glViewport(0, 0, 1280, 720);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-	glfwSetCursorEnterCallback(window, mouse_enter_callback);
 
 	// Size of rendered points
 	glPointSize(0.01f);
@@ -180,7 +164,8 @@ int main()
 	double currentTime = glfwGetTime();
 	double accumulator = 0.0;
 
-	
+	// set up force field
+	Field forceField;
 
 	// PERLIN NOISE START
 	/*Field gradients(24, 24, 24);
@@ -197,6 +182,9 @@ int main()
 	forceField.setWind(Vec3f(0.0f, 1.0f, 0.0f), Vec3f(-1.0f, -1.0f, -1.0f), Vec3f(1.0f, 0.0f, 1.0f));*/
 	// VORTEX FIELD END
 
+	// Base Field to reset to - MAKE SURE THIS IS THE LAST THING BEFORE MAIN LOOP
+	Field baseField = forceField;
+
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop
@@ -205,11 +193,28 @@ int main()
 			particles.push_back(Particle(dist(gen) * 0.05, dist(gen) * 0.05f + 0.95f, dist(gen) * 0.05));
 		}*/
 		// PERLIN NOISE END
+
 		//GENERIC SNOWFALL START
 		for (int i = 0; i < 3; i++) {
 			particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
 		}
 		//GENERIC SNOWFALL END
+
+		// Mouse interaction
+		int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
+		if (state == GLFW_PRESS)
+		{
+			double xpos, ypos;
+			glfwGetCursorPos(window, &xpos, &ypos);
+			if (xpos >= 0 && xpos <= windowSizeX && ypos >= 0 && ypos <= windowSizeY)
+			{
+				blowFromCursor(xpos, ypos, forceField);
+			}
+		}
+		else
+		{
+			forceField = baseField;
+		}
 
 		processInput(window);
 
