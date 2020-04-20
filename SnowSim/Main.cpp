@@ -73,6 +73,19 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	forceField.setField(Vec3f(1, -2, 0), Vec3f(realX, realY - 0.2, -1), Vec3f(realX + 0.2, realY, 1));
 }
 
+// callback for mouse entering screen
+void mouse_enter_callback(GLFWwindow* window, int entered)
+{
+	if (entered)
+	{
+		glfwSetCursorPosCallback(window, mouse_callback);
+	}
+	else
+	{
+		glfwSetCursorPosCallback(window, NULL);
+	}
+}
+
 int main()
 {
 	// Random number generator for testing particle emission
@@ -125,6 +138,7 @@ int main()
 	glViewport(0, 0, 1280, 720);
 
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetCursorEnterCallback(window, mouse_enter_callback);
 
 	// Size of rendered points
 	glPointSize(0.01f);
@@ -206,9 +220,7 @@ int main()
 
 		accumulator += frameTime;
 
-		// Once time accumulated passes timestep,
-		// get mouse input
-		glfwSetCursorPosCallback(window, mouse_callback);
+		// Once time accumulated passes timestep
 		// update particles
 		while(accumulator >= dt) {
 

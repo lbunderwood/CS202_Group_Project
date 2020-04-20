@@ -62,14 +62,40 @@ void Field::setWind(const Vec3f& wind)
 	}
 }
 
+// I don't like these functions but they keep the next two dry
+void roundUp(float& num)
+{
+	if (num < -1)
+	{
+		num = -1;
+	}
+}
+void roundDown(float& num)
+{
+	if (num > 1)
+	{
+		num = 1;
+	}
+}
+
 // sets wind speed for part of the field using Vec3f for wind and region
 void Field::setWind(const Vec3f& wind, const Vec3f& minCorner, const Vec3f& maxCorner)
 {
-	for (int i = floor(((double)minCorner.x_ + 1.0) * 10.0); i < floor(((double)maxCorner.x_ + 1.0) * 10.0); i++)
+	Vec3f min = minCorner;
+	Vec3f max = maxCorner;
+
+	roundUp(min.x_);
+	roundUp(min.y_);
+	roundUp(min.z_);
+	roundDown(max.x_);
+	roundDown(max.y_);
+	roundDown(max.z_);
+
+	for (int i = floor(((double)min.x_ + 1.0) * 10.0); i < floor(((double)max.x_ + 1.0) * 10.0); i++)
 	{
-		for (int j = floor(((double)minCorner.y_ + 1.0) * 10.0); j < floor(((double)maxCorner.y_ + 1.0) * 10.0); j++)
+		for (int j = floor(((double)min.y_ + 1.0) * 10.0); j < floor(((double)max.y_ + 1.0) * 10.0); j++)
 		{
-			for (int k = floor(((double)minCorner.z_ + 1.0) * 10.0); k < floor(((double)maxCorner.z_ + 1.0) * 10.0); k++)
+			for (int k = floor(((double)min.z_ + 1.0) * 10.0); k < floor(((double)max.z_ + 1.0) * 10.0); k++)
 			{
 				field_[i][j][k] += wind;
 			}
@@ -80,11 +106,21 @@ void Field::setWind(const Vec3f& wind, const Vec3f& minCorner, const Vec3f& maxC
 // sets field value for part of the field using Vec3f for wind and region
 void Field::setField(const Vec3f& vector, const Vec3f& minCorner, const Vec3f& maxCorner)
 {
-	for (int i = floor(((double)minCorner.x_ + 1.0) * 10.0); i < floor(((double)maxCorner.x_ + 1.0) * 10.0); i++)
+	Vec3f min = minCorner;
+	Vec3f max = maxCorner;
+
+	roundUp(min.x_);
+	roundUp(min.y_);
+	roundUp(min.z_);
+	roundDown(max.x_);
+	roundDown(max.y_);
+	roundDown(max.z_);
+
+	for (int i = floor(((double)min.x_ + 1.0) * 10.0); i < floor(((double)max.x_ + 1.0) * 10.0); i++)
 	{
-		for (int j = floor(((double)minCorner.y_ + 1.0) * 10.0); j < floor(((double)maxCorner.y_ + 1.0) * 10.0); j++)
+		for (int j = floor(((double)min.y_ + 1.0) * 10.0); j < floor(((double)max.y_ + 1.0) * 10.0); j++)
 		{
-			for (int k = floor(((double)minCorner.z_ + 1.0) * 10.0); k < floor(((double)maxCorner.z_ + 1.0) * 10.0); k++)
+			for (int k = floor(((double)min.z_ + 1.0) * 10.0); k < floor(((double)max.z_ + 1.0) * 10.0); k++)
 			{
 				field_[i][j][k] = vector;
 			}
