@@ -6,6 +6,16 @@
 // the user can dynamically switch between a number of different fields.
 
 #include "Modes.h"
+#include <iomanip>
+
+void modeMenu()
+{
+	std::cout << "All of the snow simulation modes and the key that should be pressed to select them are as follows:\n\n"
+		"Standard snowfall ------ s\n"
+		"Wind ------------------- + or - to increase or decrease wind\n"
+		"Votex ------------------ v\n"
+		"Perlin Noise Generator - p\n";
+}
 
 void perlinMode(Field& field)
 {
@@ -16,15 +26,10 @@ void perlinMode(Field& field)
 
 void vortexMode(Field& field)
 {
+	field.setWind(Vec3f(-0.5f, 0.0f, -1.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(1.0f, 1.0f, 1.0f));
+	field.setWind(Vec3f(-1.0f, 0.0f, 0.5f), Vec3f(0.0f, 0.0f, -1.0f), Vec3f(1.0f, 1.0f, 0.0f));
+	field.setWind(Vec3f(0.5f, 0.0f, 1.0f), Vec3f(-1.0f, 0.0f, -1.0f), Vec3f(0.0f, 1.0f, 0.0f));
+	field.setWind(Vec3f(1.0f, 0.0f, -0.5f), Vec3f(-1.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 1.0f));
 
-}
-
-void standardMode(Field& field)
-{
-
-}
-
-void simpleWind(Field& field, int speed)
-{
-
+	field.setWind(Vec3f(0.0f, 1.0f, 0.0f), Vec3f(-1.0f, -1.0f, -1.0f), Vec3f(1.0f, 0.0f, 1.0f));
 }

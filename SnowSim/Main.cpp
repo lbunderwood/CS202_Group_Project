@@ -173,13 +173,10 @@ int main()
 	// PERLIN NOISE END
 	
 	// VORTEX FIELD START
-	/*forceField.setWind(Vec3f(-0.5f, 0.0f, -1.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(1.0f, 1.0f, 1.0f));
-	forceField.setWind(Vec3f(-1.0f, 0.0f, 0.5f), Vec3f(0.0f, 0.0f, -1.0f), Vec3f(1.0f, 1.0f, 0.0f));
-	forceField.setWind(Vec3f(0.5f, 0.0f, 1.0f), Vec3f(-1.0f, 0.0f, -1.0f), Vec3f(0.0f, 1.0f, 0.0f));
-	forceField.setWind(Vec3f(1.0f, 0.0f, -0.5f), Vec3f(-1.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 1.0f));
-
-	forceField.setWind(Vec3f(0.0f, 1.0f, 0.0f), Vec3f(-1.0f, -1.0f, -1.0f), Vec3f(1.0f, 0.0f, 1.0f));*/
+	// vortexMode(forceField);
 	// VORTEX FIELD END
+
+	modeMenu();
 
 	// Base Field to reset to - MAKE SURE THIS IS THE LAST THING BEFORE MAIN LOOP
 	Field baseField = forceField;

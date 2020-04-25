@@ -12,12 +12,10 @@
 #include "Vec3f.h"
 #include <iostream>
 
+void modeMenu();
+
 void perlinMode(Field& field);
 
 void vortexMode(Field& field);
-
-void standardMode(Field& field);
-
-void simpleWind(Field& field, int speed);
 
 #endif
