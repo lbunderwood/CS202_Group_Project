@@ -10,6 +10,7 @@
 #include "Vec3f.h"
 #include "Particle.h"
 #include "Field.h"
+#include "Modes.h"
 #include <iostream>
 #include <vector>
 #include <list>
@@ -168,9 +169,7 @@ int main()
 	Field forceField;
 
 	// PERLIN NOISE START
-	/*Field gradients(24, 24, 24);
-	gradients.genGradients();
-	forceField.addPerlin(gradients);*/
+	// perlinMode(forceField);
 	// PERLIN NOISE END
 	
 	// VORTEX FIELD START

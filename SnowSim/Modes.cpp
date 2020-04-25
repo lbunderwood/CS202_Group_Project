@@ -7,22 +7,24 @@
 
 #include "Modes.h"
 
-void perlinMode()
+void perlinMode(Field& field)
+{
+	Field gradients(24, 24, 24);
+	gradients.genGradients();
+	field.addPerlin(gradients);
+}
+
+void vortexMode(Field& field)
 {
 
 }
 
-void vortexMode()
+void standardMode(Field& field)
 {
 
 }
 
-void standardMode()
-{
-
-}
-
-void simpleWind()
+void simpleWind(Field& field, int speed)
 {
 
 }
