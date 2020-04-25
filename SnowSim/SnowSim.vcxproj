@@ -134,11 +134,13 @@
   <ItemGroup>
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Modes.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Vec3f.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Modes.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Vec3f.h" />
   </ItemGroup>

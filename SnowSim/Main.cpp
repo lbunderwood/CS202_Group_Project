@@ -55,7 +55,7 @@ void processInput(GLFWwindow* window) {
 	}
 }
 
-// callback to manipulate field using cursor. Needs access to field, so it's here
+// sets field around cursor to blow particles away
 void blowFromCursor(double xpos, double ypos, Field& field)
 {
 	static Field previousField = field;
