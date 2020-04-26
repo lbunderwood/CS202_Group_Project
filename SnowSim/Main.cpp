@@ -145,14 +145,41 @@ int main()
 		0,   0,   1,   0,
 		0,   0,   0,   1 };
 
+	std::vector<float> box{
+		1, 1, 1, -1, 1, 1,
+		-1, 1, 1, -1, 1, -1,
+		-1, 1, -1, 1, 1, -1,
+		1, 1, -1, 1, 1, 1,
+
+		1, -1, 1, -1, -1, 1,
+		-1, -1, 1, -1, -1, -1,
+		-1, -1, -1, 1, -1, -1,
+		1, -1, -1, 1, -1, 1,
+
+		1, 1, 1, 1, -1, 1,
+		-1, 1, 1, -1, -1, 1,
+		-1, 1, -1, -1, -1, -1,
+		1, 1, -1, 1, -1, -1,
+	};
+
 	unsigned int vao;
 	glGenVertexArrays(1, &vao);
+	unsigned int vao2;
+	glGenVertexArrays(1, &vao2);
 	unsigned int vbo;
 	glGenBuffers(1, &vbo);
+	unsigned int vbo2;
+	glGenBuffers(1, &vbo2);
 
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices.front(), GL_STREAM_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+
+	glBindVertexArray(vao2);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo2);
+	glBufferData(GL_ARRAY_BUFFER, box.size() * sizeof(float), &box.front(), GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 
@@ -312,6 +339,9 @@ int main()
 
 		// Draw points
 		glDrawArrays(GL_POINTS, 0, particles.size());
+
+		glBindVertexArray(vao2);
+		glDrawArrays(GL_LINES, 0, box.size());
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
