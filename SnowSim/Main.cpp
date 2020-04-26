@@ -186,7 +186,7 @@ int main()
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 100; i++) {
 			if (perlin)
 			{
 				particles.push_back(Particle(dist(gen) * 0.05, dist(gen) * 0.05f, dist(gen) * 0.05));
