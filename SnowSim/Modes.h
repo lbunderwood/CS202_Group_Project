@@ -18,4 +18,6 @@ void perlinMode(Field& field);
 
 void vortexMode(Field& field);
 
+void checkInput(GLFWwindow* window, Field& forceField, Field& baseField, bool& perlin);
+
 #endif

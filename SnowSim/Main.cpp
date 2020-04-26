@@ -57,10 +57,9 @@ void processInput(GLFWwindow* window) {
 }
 
 // sets field around cursor to blow particles away
-void blowFromCursor(double xpos, double ypos, Field& field)
+void blowFromCursor(double xpos, double ypos, Field& field, const Field& baseField)
 {
-	static Field previousField = field;
-	field = previousField;
+	field = baseField;
 
 	double realX = xpos / (windowSizeX / 2) - 1;
 	double realY = ypos / (windowSizeY / -2) + 1;
@@ -84,8 +83,7 @@ int main()
 	// Initialized with 100 Particles
 	std::list<Particle> particles;
 	for (int i = 0; i < 100; i++) {
-		Particle newParticle(Particle(dist(gen) * 0.05, dist(gen) * 0.05f + 0.95f, dist(gen) * 0.05));
-		particles.push_back(newParticle);
+		particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
 	}
 
 	// vector<float> vertices
@@ -178,39 +176,43 @@ int main()
 
 	modeMenu();
 
+	bool perlin = false;
+
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
+
 	// Base Field to reset to - MAKE SURE THIS IS THE LAST THING BEFORE MAIN LOOP
 	Field baseField = forceField;
 
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop
-		// PERLIN NOISE START
-		/*for (int i = 0; i < 100; i++) {
-			particles.push_back(Particle(dist(gen) * 0.05, dist(gen) * 0.05f + 0.95f, dist(gen) * 0.05));
-		}*/
-		// PERLIN NOISE END
-
-		//GENERIC SNOWFALL START
-		for (int i = 0; i < 3; i++) {
-			particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
+		for (int i = 0; i < 5; i++) {
+			if (perlin)
+			{
+				particles.push_back(Particle(dist(gen) * 0.05, dist(gen) * 0.05f, dist(gen) * 0.05));
+			}
+			else
+			{
+				particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
+			}
 		}
-		//GENERIC SNOWFALL END
 
 		// Mouse interaction
-		int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-		if (state == GLFW_PRESS)
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		{
 			double xpos, ypos;
 			glfwGetCursorPos(window, &xpos, &ypos);
 			if (xpos >= 0 && xpos <= windowSizeX && ypos >= 0 && ypos <= windowSizeY)
 			{
-				blowFromCursor(xpos, ypos, forceField);
+				blowFromCursor(xpos, ypos, forceField, baseField);
 			}
 		}
 		else
 		{
 			forceField = baseField;
 		}
+
+		checkInput(window, forceField, baseField, perlin);
 
 		processInput(window);
 
