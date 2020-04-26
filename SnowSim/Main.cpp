@@ -61,6 +61,15 @@ void processInput(GLFWwindow* window) {
 	}
 }
 
+void cameraInput(GLFWwindow* window, float& theta) {
+	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+		theta -= (M_PI / 180.0f);
+	}
+	else if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+		theta += (M_PI / 180.0f);
+	}
+}
+
 // sets field around cursor to blow particles away
 void blowFromCursor(double xpos, double ypos, Field& field, const Field& baseField)
 {
@@ -130,13 +139,6 @@ int main()
 
 	// Size of rendered points
 	glPointSize(0.01f);
-
-	// View Matrix (Camera Pos.)
-	float view[16] = {
-		1,   0,   0,   0,
-		0,   1,   0,   0,
-		0,   0,   1,   0,
-		0,   0,-4.0,   1 };
 
 	// Model Matrix
 	float model[16] = {
@@ -226,6 +228,8 @@ int main()
 
 	glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
 
+	float theta = 0;
+
 	// Base Field to reset to - MAKE SURE THIS IS THE LAST THING BEFORE MAIN LOOP
 	Field baseField = forceField;
 
@@ -260,7 +264,28 @@ int main()
 
 		checkInput(window, forceField, baseField, perlin);
 
+		cameraInput(window, theta);
+
 		processInput(window);
+		
+		float radius = 3.75;
+		float camX = radius * std::sin(theta);
+		float camY = 0.0f;
+		float camZ = radius * std::cos(theta);
+		Vec3f dir = (Vec3f(camX, camY, camZ) - Vec3f(0.0f, 0.0f, 0.0f)).unit();
+		Vec3f tempUp(0.0f, 1.0f, 0.0f);
+		Vec3f right = tempUp.cross(dir);
+		Vec3f up = dir.cross(right);
+		float viewX = (right.x_ * camX + right.y_ * camY + right.z_ * camZ);
+		float viewY = (up.x_ * camX + up.y_ * camY + up.z_ * camZ);
+		float viewZ = (dir.x_ * camX + dir.y_ * camY + dir.z_ * camZ);
+
+		// View Matrix (Camera Pos.)
+		float view[16] = {
+			right.x_, right.y_, right.z_, 0,
+			   up.x_,    up.y_,    up.z_, 0,
+			  dir.x_,   dir.y_,   dir.z_, 0,
+			  -viewX,   -viewY,   -viewZ, 1 };
 
 		// More stuff for time accumulator
 		double newTime = glfwGetTime();
@@ -311,15 +336,15 @@ int main()
 		float b = -t;
 		float r = t * aspectRatio;
 		float l = -r;
-		float m11 = n / r;
-		float m22 = n / t;
-		float m33 = (f + n) / (n - f);
-		float m34 = 2 * f * n / (n - f);
+		float m00 = n / r;
+		float m11 = n / t;
+		float m22 = (f + n) / (n - f);
+		float m23 = 2 * f * n / (n - f);
 		float projection[16] = {
-			m11, 0,   0,   0,
-			0, m22,   0,   0,
-			0,   0, m33,  -1,
-			0,   0, m34,   0 };
+			m00, 0,   0,   0,
+			0, m11,   0,   0,
+			0,   0, m22,  -1,
+			0,   0, m23,   0 };
 
 		int modelLoc = glGetUniformLocation(program, "model");
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model);

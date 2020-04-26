@@ -27,7 +27,7 @@ public:
 	// returns result of dot operation
 	float dot(const Vec3f& vec) const;
 
-	// returns result of dot operation
+	// returns result of cross operation
 	Vec3f cross(const Vec3f& vec) const;
 
 	// returns length of vector

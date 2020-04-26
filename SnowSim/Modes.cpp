@@ -14,11 +14,13 @@ void modeMenu()
 		"Standard snowfall ------ s\n"
 		"Wind ------------------- + or - to increase or decrease wind\n"
 		"Votex ------------------ v\n"
-		"Perlin Noise Generator - p\n";
+		"Perlin Noise Generator - p\n"
+		"Spin around the box ---- left or right arrow key\n";
 }
 
 void perlinMode(Field& field)
 {
+	field.setField(Vec3f(0, 0, 0), Vec3f(-1, -1, -1), Vec3f(1, 1, 1));
 	Field gradients(24, 24, 24);
 	gradients.genGradients();
 	field.addPerlin(gradients);
