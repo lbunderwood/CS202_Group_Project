@@ -5,6 +5,8 @@
 // Main.cpp
 // main source file for SnowSim
 
+#define _USE_MATH_DEFINES
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "Vec3f.h"
@@ -14,6 +16,7 @@
 #include <vector>
 #include <list>
 #include <random>
+#include <cmath>
 
 namespace
 {
@@ -26,10 +29,12 @@ namespace
 const char* vertexShaderSource = 
 "#version 330 core\n"
 "layout (location = 0) in vec3 aPos;\n"
-"uniform float yOffset;\n"
+"uniform mat4 model;\n"
+"uniform mat4 view;\n"
+"uniform mat4 projection;\n"
 "void main()\n"
 "{\n"
-"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+"   gl_Position = projection * view * model * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "}\0";
 
 // Code for fragment shader
@@ -126,6 +131,20 @@ int main()
 
 	// Size of rendered points
 	glPointSize(0.01f);
+
+	// View Matrix (Camera Pos.)
+	float view[16] = {
+		1,   0,   0,   0,
+		0,   1,   0,   0,
+		0,   0,   1,   0,
+		0,   0,-4.0,   1 };
+
+	// Model Matrix
+	float model[16] = {
+		1,   0,   0,   0,
+		0,   1,   0,   0,
+		0,   0,   1,   0,
+		0,   0,   0,   1 };
 
 	unsigned int vao;
 	glGenVertexArrays(1, &vao);
@@ -253,6 +272,38 @@ int main()
 
 		glBindVertexArray(vao);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
+		
+		// Constructing perspective projection matrix
+		// based on near, far, Y FOV, aspect ratio
+		int w = 1;
+		int h = 1;
+		glfwGetWindowSize(window, &w, &h);
+		float aspectRatio = (float)w / (float)h;
+		float fovY = 45.0f * M_PI / 180.0f;
+		float n = 0.01f;
+		float f = 10.0f;
+		float t = std::tan(fovY * 0.5f) * n;
+		float b = -t;
+		float r = t * aspectRatio;
+		float l = -r;
+		float m11 = n / r;
+		float m22 = n / t;
+		float m33 = (f + n) / (n - f);
+		float m34 = 2 * f * n / (n - f);
+		float projection[16] = {
+			m11, 0,   0,   0,
+			0, m22,   0,   0,
+			0,   0, m33,  -1,
+			0,   0, m34,   0 };
+
+		int modelLoc = glGetUniformLocation(program, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model);
+
+		int viewLoc = glGetUniformLocation(program, "view");
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, view);
+
+		int projectionLoc = glGetUniformLocation(program, "projection");
+		glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection);
 
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices.front(), GL_STREAM_DRAW);
 

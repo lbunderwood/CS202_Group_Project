@@ -85,7 +85,7 @@ void Particle::pushData(std::vector<float>& vertices)
 {
 	vertices.push_back(pos_.x_);
 	vertices.push_back(pos_.y_);
-	vertices.push_back(-1 * pos_.z_);
+	vertices.push_back(pos_.z_);
 }
 
 
