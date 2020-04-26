@@ -41,7 +41,7 @@ void Field::setWind(float windspeed)
 		{
 			for (auto& l : m)
 			{
-				l.x_ = windspeed;
+				l.x_ += windspeed;
 			}
 		}
 	}

@@ -12,6 +12,7 @@
 #include "Vec3f.h"
 #include "Particle.h"
 #include "Field.h"
+#include "Modes.h"
 #include <iostream>
 #include <vector>
 #include <list>
@@ -60,11 +61,10 @@ void processInput(GLFWwindow* window) {
 	}
 }
 
-// callback to manipulate field using cursor. Needs access to field, so it's here
-void blowFromCursor(double xpos, double ypos, Field& field)
+// sets field around cursor to blow particles away
+void blowFromCursor(double xpos, double ypos, Field& field, const Field& baseField)
 {
-	static Field previousField = field;
-	field = previousField;
+	field = baseField;
 
 	double realX = xpos / (windowSizeX / 2) - 1;
 	double realY = ypos / (windowSizeY / -2) + 1;
@@ -88,8 +88,7 @@ int main()
 	// Initialized with 100 Particles
 	std::list<Particle> particles;
 	for (int i = 0; i < 100; i++) {
-		Particle newParticle(Particle(dist(gen) * 0.05, dist(gen) * 0.05f + 0.95f, dist(gen) * 0.05));
-		particles.push_back(newParticle);
+		particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
 	}
 
 	// vector<float> vertices
@@ -187,19 +186,18 @@ int main()
 	Field forceField;
 
 	// PERLIN NOISE START
-	/*Field gradients(24, 24, 24);
-	gradients.genGradients();
-	forceField.addPerlin(gradients);*/
+	// perlinMode(forceField);
 	// PERLIN NOISE END
 	
 	// VORTEX FIELD START
-	/*forceField.setWind(Vec3f(-0.5f, 0.0f, -1.0f), Vec3f(0.0f, 0.0f, 0.0f), Vec3f(1.0f, 1.0f, 1.0f));
-	forceField.setWind(Vec3f(-1.0f, 0.0f, 0.5f), Vec3f(0.0f, 0.0f, -1.0f), Vec3f(1.0f, 1.0f, 0.0f));
-	forceField.setWind(Vec3f(0.5f, 0.0f, 1.0f), Vec3f(-1.0f, 0.0f, -1.0f), Vec3f(0.0f, 1.0f, 0.0f));
-	forceField.setWind(Vec3f(1.0f, 0.0f, -0.5f), Vec3f(-1.0f, 0.0f, 0.0f), Vec3f(0.0f, 1.0f, 1.0f));
-
-	forceField.setWind(Vec3f(0.0f, 1.0f, 0.0f), Vec3f(-1.0f, -1.0f, -1.0f), Vec3f(1.0f, 0.0f, 1.0f));*/
+	// vortexMode(forceField);
 	// VORTEX FIELD END
+
+	modeMenu();
+
+	bool perlin = false;
+
+	glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
 
 	// Base Field to reset to - MAKE SURE THIS IS THE LAST THING BEFORE MAIN LOOP
 	Field baseField = forceField;
@@ -207,33 +205,33 @@ int main()
 	while (!glfwWindowShouldClose(window)) {
 
 		// Adds some number of particles each loop
-		// PERLIN NOISE START
-		/*for (int i = 0; i < 100; i++) {
-			particles.push_back(Particle(dist(gen) * 0.05, dist(gen) * 0.05f + 0.95f, dist(gen) * 0.05));
-		}*/
-		// PERLIN NOISE END
-
-		//GENERIC SNOWFALL START
-		for (int i = 0; i < 3; i++) {
-			particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
+		for (int i = 0; i < 100; i++) {
+			if (perlin)
+			{
+				particles.push_back(Particle(dist(gen) * 0.05, dist(gen) * 0.05f, dist(gen) * 0.05));
+			}
+			else
+			{
+				particles.push_back(Particle(dist(gen), dist(gen) * 0.1f + 0.9f, dist(gen)));
+			}
 		}
-		//GENERIC SNOWFALL END
 
 		// Mouse interaction
-		int state = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT);
-		if (state == GLFW_PRESS)
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		{
 			double xpos, ypos;
 			glfwGetCursorPos(window, &xpos, &ypos);
 			if (xpos >= 0 && xpos <= windowSizeX && ypos >= 0 && ypos <= windowSizeY)
 			{
-				blowFromCursor(xpos, ypos, forceField);
+				blowFromCursor(xpos, ypos, forceField, baseField);
 			}
 		}
 		else
 		{
 			forceField = baseField;
 		}
+
+		checkInput(window, forceField, baseField, perlin);
 
 		processInput(window);
 
