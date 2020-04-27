@@ -10,12 +10,14 @@
 
 void modeMenu()
 {
-	std::cout << "All of the snow simulation modes and the key that should be pressed to select them are as follows:\n\n"
+	std::cout << "All of the snow simulation modes and the key that should be pressed to select them are as follows:\n"
 		"Standard snowfall ------ s\n"
-		"Wind ------------------- + or - to increase or decrease wind\n"
-		"Votex ------------------ v\n"
-		"Perlin Noise Generator - p\n"
-		"Spin around the box ---- left or right arrow key\n";
+		"Vortex ----------------- v\n"
+		"Perlin Noise Generator - p\n\n"
+		"General Controls:\n"
+		"Wind ------------------- - or + to decrease or increase wind\n"
+		"Spin around the box ---- left or right arrow key\n"
+		"Mouse blower speed ----- [ or ] to decrease or increase speed (try negative speeds!)\n\n";
 }
 
 void perlinMode(Field& field)

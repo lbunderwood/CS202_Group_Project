@@ -61,6 +61,15 @@ void processInput(GLFWwindow* window) {
 	}
 }
 
+void mouseStrengthInput(GLFWwindow* window, float& s) {
+	if (glfwGetKey(window, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS) {
+		s -= 0.1;
+	}
+	if (glfwGetKey(window, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS) {
+		s += 0.1;
+	}
+}
+
 void cameraInput(GLFWwindow* window, float& theta) {
 	if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
 		theta -= (M_PI / 180.0f);
@@ -71,17 +80,41 @@ void cameraInput(GLFWwindow* window, float& theta) {
 }
 
 // sets field around cursor to blow particles away
-void blowFromCursor(double xpos, double ypos, Field& field, const Field& baseField)
+void blowFromCursor(double xpos, double ypos, Field& field, const Field& baseField, float angle, float s)
 {
 	field = baseField;
 
-	double realX = xpos / (windowSizeX / 2) - 1;
+	double realX = xpos / (windowSizeX / 4) - 2;
 	double realY = ypos / (windowSizeY / -2) + 1;
 
-	field.setField(Vec3f(1, 2, 0), Vec3f(realX, realY, -1), Vec3f(realX + 0.2, realY + 0.2, 1));
-	field.setField(Vec3f(-1, 2, 0), Vec3f(realX - 0.2, realY, -1), Vec3f(realX, realY + 0.2, 1));
-	field.setField(Vec3f(-1, -2, 0), Vec3f(realX - 0.2, realY - 0.2, -1), Vec3f(realX, realY, 1));
-	field.setField(Vec3f(1, -2, 0), Vec3f(realX, realY - 0.2, -1), Vec3f(realX + 0.2, realY, 1));
+	angle = fmod(angle, 2 * M_PI);
+
+	  // FRONT
+	if (abs(angle) < (M_PI / 4) || abs(angle) > (7 * M_PI / 4)) {
+		field.setField(Vec3f(s, s, 0), Vec3f(realX, realY, -1), Vec3f(realX + 0.2, realY + 0.2, 1));
+		field.setField(Vec3f(-s, s, 0), Vec3f(realX - 0.2, realY, -1), Vec3f(realX, realY + 0.2, 1));
+		field.setField(Vec3f(-s, -s, 0), Vec3f(realX - 0.2, realY - 0.2, -1), Vec3f(realX, realY, 1));
+		field.setField(Vec3f(s, -s, 0), Vec3f(realX, realY - 0.2, -1), Vec3f(realX + 0.2, realY, 1));
+	} // BACK
+	else if (abs(angle) > (3 * M_PI / 4) && abs(angle) < (5 * M_PI / 4)) {
+		field.setField(Vec3f(s, s, 0), Vec3f(-realX, realY, -1), Vec3f(-realX + 0.2, realY + 0.2, 1));
+		field.setField(Vec3f(-s, s, 0), Vec3f(-realX - 0.2, realY, -1), Vec3f(-realX, realY + 0.2, 1));
+		field.setField(Vec3f(-s, -s, 0), Vec3f(-realX - 0.2, realY - 0.2, -1), Vec3f(-realX, realY, 1));
+		field.setField(Vec3f(s, -s, 0), Vec3f(-realX, realY - 0.2, -1), Vec3f(-realX + 0.2, realY, 1));
+	} // LEFT
+	else if (angle >= (M_PI / 4) && angle <= (3 * M_PI / 4) ||
+		angle <= (-5 * M_PI / 4) && angle >= (-7 * M_PI / 4)) {
+		field.setField(Vec3f(0, s, s), Vec3f(-1, realY, realX), Vec3f(1, realY + 0.2, realX + 0.2));
+		field.setField(Vec3f(0, s, -s), Vec3f(-1, realY, realX - 0.2), Vec3f(1, realY + 0.2, realX));
+		field.setField(Vec3f(0, -s, -s), Vec3f(-1, realY - 0.2, realX - 0.2), Vec3f(1, realY, realX));
+		field.setField(Vec3f(0, -s, s), Vec3f(-1, realY - 0.2, realX), Vec3f(1, realY, realX + 0.2));
+	} // RIGHT
+	else {
+		field.setField(Vec3f(0, s, s), Vec3f(-1, realY, -realX), Vec3f(1, realY + 0.2, -realX + 0.2));
+		field.setField(Vec3f(0, s, -s), Vec3f(-1, realY, -realX - 0.2), Vec3f(1, realY + 0.2, -realX));
+		field.setField(Vec3f(0, -s, -s), Vec3f(-1, realY - 0.2, -realX - 0.2), Vec3f(1, realY, -realX));
+		field.setField(Vec3f(0, -s, s), Vec3f(-1, realY - 0.2, -realX), Vec3f(1, realY, -realX + 0.2));
+	}
 }
 
 
@@ -230,6 +263,8 @@ int main()
 
 	float theta = 0;
 
+	float mouseStrength = 2;
+
 	// Base Field to reset to - MAKE SURE THIS IS THE LAST THING BEFORE MAIN LOOP
 	Field baseField = forceField;
 
@@ -254,7 +289,7 @@ int main()
 			glfwGetCursorPos(window, &xpos, &ypos);
 			if (xpos >= 0 && xpos <= windowSizeX && ypos >= 0 && ypos <= windowSizeY)
 			{
-				blowFromCursor(xpos, ypos, forceField, baseField);
+				blowFromCursor(xpos, ypos, forceField, baseField, theta, mouseStrength);
 			}
 		}
 		else
@@ -263,6 +298,8 @@ int main()
 		}
 
 		checkInput(window, forceField, baseField, perlin);
+
+		mouseStrengthInput(window, mouseStrength);
 
 		cameraInput(window, theta);
 
